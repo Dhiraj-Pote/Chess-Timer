@@ -93,14 +93,14 @@ export default function Home() {
             />
             
             <div className="button-container">
-              {gameInProgress && (
+              {/* {gameInProgress && (
                 <button 
                   className="reset-button"
                   onClick={handleGameEnd}
                 >
                   Reset Game
                 </button>
-              )}
+              )} */}
               
               <button 
                 className="back-button"

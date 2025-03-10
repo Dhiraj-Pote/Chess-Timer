@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-
 type ChessTimerProps = {
   player1Time: number;
   player2Time: number;
@@ -42,8 +41,8 @@ const ChessTimer: React.FC<ChessTimerProps> = ({
       setActivePlayer(null);
       setPlayer1Moves(0);
       setPlayer2Moves(0);
+      setIsPaused(false);
     } else {
-      // Clear interval when game is not in progress
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
@@ -86,24 +85,23 @@ const ChessTimer: React.FC<ChessTimerProps> = ({
   }, [activePlayer, gameInProgress, isPaused, onGameEnd]);
   
   const handlePlayerClick = (player: 1 | 2) => {
-    if (!gameInProgress || isPaused) return;
-    
-    // First click of the game
+    if (!gameInProgress || isPaused) return; // Prevent interaction when paused
+  
+    // If the game was reset and no active player is set, start with the other player's timer
     if (activePlayer === null) {
-      setActivePlayer(player === 1 ? 2 : 1);
+      setActivePlayer(player === 1 ? 2 : 1); // Start the opponent's timer
       return;
     }
-    
-    // Can only click your own timer when it's your turn
-    if (player !== activePlayer) return;
-    
-    // Clear existing interval
+  
+    if (player !== activePlayer) return; // Only the active player can click
+  
+    // Stop the previous timer
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
-    
-    // Add increment to the player who just moved
+  
+    // Apply increment to the player who just clicked
     if (activePlayer === 1) {
       setPlayer1Time(prev => prev + player1Increment);
       setPlayer1Moves(prev => prev + 1);
@@ -111,15 +109,29 @@ const ChessTimer: React.FC<ChessTimerProps> = ({
       setPlayer2Time(prev => prev + player2Increment);
       setPlayer2Moves(prev => prev + 1);
     }
-    
-    // Switch active player
+  
+    // Switch turn and start the other player's timer
     setActivePlayer(player === 1 ? 2 : 1);
   };
 
   const handlePauseGame = () => {
     setIsPaused(prev => !prev);
   };
-  
+
+  const handleResetGame = () => {
+    setPlayer1Time(initialPlayer1Time);
+    setPlayer2Time(initialPlayer2Time);
+    setPlayer1Moves(0);
+    setPlayer2Moves(0);
+    setActivePlayer(null);
+    setIsPaused(false);
+
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  };
+
   return (
     <div className="chess-timer">
       <div 
@@ -144,9 +156,14 @@ const ChessTimer: React.FC<ChessTimerProps> = ({
         <div className="moves-count">Moves: {player1Moves}</div>
       </div>
       
-      <button className="pause-button" onClick={handlePauseGame}>
-        {isPaused ? 'Resume Game' : 'Pause Game'}
-      </button>
+      <div className="button-container">
+        <button className="pause-button" onClick={handlePauseGame}>
+          {isPaused ? 'Resume Game' : 'Pause Game'}
+        </button>
+        <button className="reset-button" onClick={handleResetGame}>
+          Reset Game
+        </button>
+      </div>
     </div>
   );
 };
