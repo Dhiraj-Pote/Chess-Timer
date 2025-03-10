@@ -286,10 +286,9 @@ body {
 /* Settings Panel */
 .settings-panel {
   background: var(--card-bg-gradient);
-  border-radius: 16px;
+  border-radius: 12px;
   padding: 2rem;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-  animation: slideUp 0.5s ease-out;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
 
@@ -317,9 +316,7 @@ body {
 }
 
 .settings-group {
-  margin-bottom: 1.25rem;
-  position: relative;
-  transition: all 0.3s ease;
+  margin-bottom: 1.5rem;
 }
 
 .settings-group:hover {
@@ -327,29 +324,23 @@ body {
 }
 
 .settings-group label {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: 500;
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
   color: var(--text-color);
-  font-size: 1.05rem;
 }
 
 .settings-group select {
-  padding: 0.6rem 1rem;
-  border-radius: 8px;
   border: 2px solid var(--light-gray);
-  width: 130px;
+  border-radius: 8px;
+  padding: 0.5rem;
+  width: 100%;
   background-color: white;
   font-size: 1rem;
   font-family: 'Poppins', sans-serif;
   font-weight: 500;
   transition: all 0.2s;
   cursor: pointer;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 10px center;
 }
 
 .settings-group select:hover {
@@ -490,4 +481,45 @@ body {
 
 .player-timer:first-child.clicked {
   transform: rotate(180deg) scale(0.98) !important;
+}
+
+.pause-button {
+  background: var(--primary-light);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.9rem 1.5rem;
+  margin-top: 1rem;
+  width: 100%;
+  font-size: 1.15rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+}
+
+.pause-button:hover {
+  background: var(--primary-color);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+}
+
+/* Footer Styles */
+.footer {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--text-color);
+  font-weight: 500;
+  position: relative;
+}
+
+.footer::before {
+  content: '';
+  display: block;
+  height: 2px;
+  width: 50px;
+  background: var(--primary-color);
+  margin: 0.5rem auto;
+  border-radius: 2px;
 }

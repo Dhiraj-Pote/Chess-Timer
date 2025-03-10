@@ -112,6 +112,10 @@ export default function Home() {
           </>
         )}
       </div>
+
+      <div className="footer">
+        Developed by Dhiraj
+      </div>
     </main>
   );
 }

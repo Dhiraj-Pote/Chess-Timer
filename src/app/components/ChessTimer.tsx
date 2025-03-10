@@ -23,7 +23,7 @@ const ChessTimer: React.FC<ChessTimerProps> = ({
   const [activePlayer, setActivePlayer] = useState<1 | 2 | null>(null);
   const [player1Moves, setPlayer1Moves] = useState(0);
   const [player2Moves, setPlayer2Moves] = useState(0);
-  const [playerClicked, setPlayerClicked] = useState<1 | 2 | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
   
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   
@@ -54,7 +54,7 @@ const ChessTimer: React.FC<ChessTimerProps> = ({
   
   // Handle timer countdown
   useEffect(() => {
-    if (gameInProgress && activePlayer) {
+    if (gameInProgress && activePlayer && !isPaused) {
       intervalRef.current = setInterval(() => {
         if (activePlayer === 1) {
           setPlayer1Time(prev => {
@@ -83,22 +83,10 @@ const ChessTimer: React.FC<ChessTimerProps> = ({
         clearInterval(intervalRef.current);
       }
     };
-  }, [activePlayer, gameInProgress, onGameEnd]);
-  
-  // Handle click animation
-  useEffect(() => {
-    if (playerClicked !== null) {
-      const timer = setTimeout(() => {
-        setPlayerClicked(null);
-      }, 150);
-      return () => clearTimeout(timer);
-    }
-  }, [playerClicked]);
+  }, [activePlayer, gameInProgress, isPaused, onGameEnd]);
   
   const handlePlayerClick = (player: 1 | 2) => {
-    if (!gameInProgress) return;
-    
-    setPlayerClicked(player);
+    if (!gameInProgress || isPaused) return;
     
     // First click of the game
     if (activePlayer === null) {
@@ -127,11 +115,15 @@ const ChessTimer: React.FC<ChessTimerProps> = ({
     // Switch active player
     setActivePlayer(player === 1 ? 2 : 1);
   };
+
+  const handlePauseGame = () => {
+    setIsPaused(prev => !prev);
+  };
   
   return (
     <div className="chess-timer">
       <div 
-        className={`player-timer ${activePlayer === 2 ? 'active' : ''} ${player2Time === 0 ? 'time-out' : ''} ${playerClicked === 2 ? 'clicked' : ''}`}
+        className={`player-timer ${activePlayer === 2 ? 'active' : ''} ${player2Time === 0 ? 'time-out' : ''}`}
         onClick={() => handlePlayerClick(2)}
       >
         <div className="timer-display">{formatTime(player2Time)}</div>
@@ -145,12 +137,16 @@ const ChessTimer: React.FC<ChessTimerProps> = ({
       </div>
       
       <div 
-        className={`player-timer ${activePlayer === 1 ? 'active' : ''} ${player1Time === 0 ? 'time-out' : ''} ${playerClicked === 1 ? 'clicked' : ''}`}
+        className={`player-timer ${activePlayer === 1 ? 'active' : ''} ${player1Time === 0 ? 'time-out' : ''}`}
         onClick={() => handlePlayerClick(1)}
       >
         <div className="timer-display">{formatTime(player1Time)}</div>
         <div className="moves-count">Moves: {player1Moves}</div>
       </div>
+      
+      <button className="pause-button" onClick={handlePauseGame}>
+        {isPaused ? 'Resume Game' : 'Pause Game'}
+      </button>
     </div>
   );
 };
