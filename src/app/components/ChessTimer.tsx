@@ -158,10 +158,10 @@ const ChessTimer: React.FC<ChessTimerProps> = ({
       
       <div className="button-container">
         <button className="pause-button" onClick={handlePauseGame}>
-          {isPaused ? 'Resume Game' : 'Pause Game'}
+          {isPaused ? 'Resume' : 'Pause'}
         </button>
         <button className="reset-button" onClick={handleResetGame}>
-          Reset Game
+          Reset
         </button>
       </div>
     </div>
